@@ -1,0 +1,56 @@
+---
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+log:
+  level: ERROR
+  format: json
+
+api:
+  dashboard: false
+  debug: false
+
+entryPoints:
+  http:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: :443
+  ssh:
+    address: :22
+
+certificatesResolvers:
+  staging:
+    acme:
+      email: <your-email>
+      storage: /ssl-certs/acme-staging.json
+      caServer: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+      dnsChallenge:
+        provider: 'cloudflare'
+        resolvers:
+          - '1.1.1.1:53'
+          - '1.0.0.1:53'
+  prod:
+    acme:
+      email: <your-email>
+      storage: /ssl-certs/acme.json
+      caServer: 'https://acme-v02.api.letsencrypt.org/directory'
+      dnsChallenge:
+        provider: 'cloudflare'
+        resolvers:
+          - '1.1.1.1:53'
+          - '1.0.0.1:53'
+
+providers:
+  file:
+    filename: '/etc/traefik/config.yml'
+    watch: true
+  docker:
+    endpoint: 'unix:///var/run/docker.sock'
+    network: 'app-network'
+    exposedByDefault: false

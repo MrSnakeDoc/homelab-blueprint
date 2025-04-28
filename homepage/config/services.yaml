@@ -1,0 +1,213 @@
+---
+- Network:
+    - AdGuard:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/adguard-home.svg'
+        href: https://adguard.<yourinternaldomain>
+        target: _blank
+        description: 'Blocking ads so you can keep pretending the internet isn’t a capitalist hellscape!'
+        server: my-docker
+        container: adguard
+        ping: adguard.<yourinternaldomain>
+        widget:
+          type: adguard
+          url: https://adguard.<yourinternaldomain>
+          username: {{HOMEPAGE_VAR_ADGUARD_USER}}
+          password: {{HOMEPAGE_VAR_ADGUARD_PASSWORD}}
+    - Traefik:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/traefik.svg'
+        href: http://traefik.<yourinternaldomain>
+        target: _blank
+        description: 'A traffic manager so fancy, you’re still wondering how you set it up without breaking everything.'
+        server: my-docker
+        container: traefik
+        ping: traefik.<yourinternaldomain>
+        widget:
+          type: traefik
+          url: https://traefik.<yourinternaldomain>
+          username: {{HOMEPAGE_VAR_TRAEFIK_USER}}
+          password: {{HOMEPAGE_VAR_TRAEFIK_PASSWORD}}
+    - Router:
+        icon: 'https://sklepsynology.pl/images/1667346330_IMG_1861037.jpg'
+        href: https://router.<yourinternaldomain>
+        target: _blank
+        description: 'Handling your network while silently judging your questionable IT skills.'
+        ping: router.<yourinternaldomain>
+        siteMonitor: https://router.<yourinternaldomain>
+
+- Infrastructure and Data:
+    - Proxmox:
+        href: https://prx.<yourinternaldomain>
+        icon: proxmox.png
+        description: 'Because you couldn’t afford real servers. Enjoy your virtual chaos, cheapskate.'
+        siteMonitor: https://prx.<yourinternaldomain>
+        ping: prx.<yourinternaldomain>
+        widget:
+          type: proxmox
+          url: https://prx.<yourinternaldomain>
+          username: {{HOMEPAGE_VAR_PROXMOX_USERNAME}}
+          password: {{HOMEPAGE_VAR_PROXMOX_PASSWORD}}
+          fields: ['vms', 'resources.cpu', 'resources.mem']
+    - Pgadmin4:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/pgadmin.svg'
+        href: https://pgadmin.<yourinternaldomain>
+        description: 'Managing your databases… badly. But hey, it’s free, so stop complaining'
+        server: my-docker
+        container: pgadmin
+        ping: pgadmin.<yourinternaldomain>
+    - RedisInsight:
+        icon: 'https://cdn.icon-icons.com/icons2/2415/PNG/512/redis_plain_logo_icon_146366.png'
+        href: https://redisinsight.<yourinternaldomain>
+        description: 'A GUI for Redis. You can’t have too many of those.'
+        server: my-docker
+        container: redisinsight
+        ping: redisinsight.<yourinternaldomain>
+    - Gitea:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/gitea.svg'
+        href: https://gitea.<yourinternaldomain>
+        description: 'A graveyard for your abandoned projects. Rest in commit-tery.'
+        server: my-docker
+        container: gitea
+        ping: gitea.<yourinternaldomain>
+        widget:
+          type: gitea
+          url: https://gitea.<yourinternaldomain>
+          key: {{HOMEPAGE_VAR_GITEA_TOKEN}}
+    - Drone:
+        icon: 'https://miro.medium.com/v2/resize:fit:256/0*AqO_2lNemh_Fl9Gm.png'
+        href: https://drone.<yourinternaldomain>
+        description: 'Automating tasks you were too lazy to do. You’re welcome, slacker.'
+        server: my-docker
+        container: drone
+        ping: drone.<yourinternaldomain>
+    - Semaphore:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/semaphore.svg'
+        href: https://semaphore.<yourinternaldomain>
+        description: 'A shiny UI that won’t make your crappy Ansible scripts any better. Sorry, no miracles here.'
+        ping: semaphore.<yourinternaldomain>
+
+- Resources:
+    - Vaultdata NAS:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/synology.svg'
+        href: https://nas.<yourinternaldomain>
+        target: _blank
+        description: "A digital landfill of memes you'll never use. Congrats, you're a curator of garbage."
+        ping: nas.<yourinternaldomain>
+        siteMonitor: https://nas.<yourinternaldomain>
+        widget:
+          type: diskstation
+          url: https://nas.<yourinternaldomain>
+          username: {{HOMEPAGE_VAR_NAS_USERNAME}}
+          password: {{HOMEPAGE_VAR_NAS_PASSWORD}}
+          fields:
+            ['uptime', 'volumeAvailable', 'resources.cpu', 'resources.mem']
+    - Vaultdata Music:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/synology.svg'
+        href: https://nas.<yourinternaldomain>/music
+        target: _blank
+        description: 'Because 10,000 songs weren’t enough to prove your taste still sucks.'
+    - Vaultdata Download Station:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/synology.svg'
+        href: https://nas.<yourinternaldomain>/dl
+        target: _blank
+        description: 'Pirating like it’s the early 2000s. Do you even know what a VPN is, genius?'
+        widget:
+          type: downloadstation
+          url: https://nas.<yourinternaldomain>/dl
+          username: {{HOMEPAGE_VAR_NAS_USERNAME}}
+          password: {{HOMEPAGE_VAR_NAS_PASSWORD}}
+          fields: ['leech', 'download', 'seed', 'upload']
+    - Gotify:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/gotify.svg'
+        href: https://gotify.<yourinternaldomain>
+        description: 'Notifications for your notifications. Because clearly, you don’t have enough distractions.'
+        server: my-docker
+        container: gotify
+        ping: gotify.<yourinternaldomain>
+    - Linkwarden:
+        icon: 'https://docs.linkwarden.app/img/logo.png'
+        href: https://linkwarden.<yourinternaldomain>
+        description: 'Hoarding is a mental illness. I hope you know that!'
+        server: my-docker
+        container: linkwarden
+        ping: linkwarden.<yourinternaldomain>
+        widget:
+          type: linkwarden
+          url: https://linkwarden.<yourinternaldomain>
+          key: {{HOMEPAGE_VAR_LINKWARDEN_KEY}}
+    - Plex:
+        icon: 'https://raw.githubusercontent.com/NX211/homer-icons/master/png/plex.png'
+        href: https://plex.<yourinternaldomain>
+        description: "Streaming your junk collection. Congratulations, you're the Netflix of trash!"
+        ping: plex.<yourinternaldomain>
+        widget:
+          type: plex
+          url: https://plex.<yourinternaldomain>
+          key: {{HOMEPAGE_VAR_PLEX_KEY}}
+    - overseerr:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/overseerr.svg'
+        href: https://overseerr.<yourinternaldomain>
+        description: "More shows? More movies? Sure. Because your 'to-watch' list isn’t already longer than your lifespan"
+        server: my-docker
+        container: overseerr
+        ping: overseerr.<yourinternaldomain>
+        widget:
+          type: overseerr
+          url: https://overseerr.<yourinternaldomain>
+          key: {{HOMEPAGE_VAR_OVERSEERR_KEY}}
+          fields: ['pending', 'approved', 'available', 'processing']
+    - Outline:
+        icon: 'https://www.getoutline.com/images/logo.svg'
+        href: https://outline.<yourinternaldomain>
+        description: 'Writing docs no one will read. Congrats, you’re a hero... not.'
+        server: my-docker
+        container: outline
+        ping: outline.<yourinternaldomain>
+    - Mealie:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/mealie.svg'
+        href: https://mealie.<yourinternaldomain>
+        description: "Here's your recipe. Burn it, over-salt it, and blame the oven, you culinary disaster!"
+        server: my-docker
+        container: mealie
+        ping: mealie.<yourinternaldomain>
+        widget:
+          type: mealie
+          url: https://mealie.<yourinternaldomain>
+          key: {{HOMEPAGE_VAR_MEALIE_KEY}}
+          fields: ['recipes', 'users', 'categories', 'tags']
+          version: 2
+
+- Monitoring:
+    - Uptime-Kuma:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/uptime-kuma.svg'
+        href: https://uptimekuma.<yourinternaldomain>
+        description: "Monitoring your services so you can keep pretending you're in control. Spoiler: you're not"
+        server: my-docker
+        container: uptimekuma
+        ping: uptimekuma.<yourinternaldomain>
+        widget:
+          type: uptimekuma
+          url: https://uptimekuma.<yourinternaldomain>
+          slug: homepage
+    - Grafana:
+        href: https://grafana.<yourinternaldomain>
+        description: 'Pretty graphs to distract you from the dumpster fire you call infrastructure!'
+        icon: grafana.png
+        server: my-docker
+        container: grafana
+        ping: grafana.<yourinternaldomain>
+        widget:
+          type: grafana
+          url: https://grafana.<yourinternaldomain>
+          username: {{HOMEPAGE_VAR_GRAFANA_USERNAME}}
+          password: {{HOMEPAGE_VAR_GRAFANA_PASSWORD}}
+          fields: ['dashboards', 'datasources', 'totalalerts', 'alertstriggered']
+    - Prometheus:
+        href: https://prometheus.<yourinternaldomain>
+        description: 'Collecting your mess, one metric at a time. Maybe try fixing it for once?'
+        icon: prometheus.png
+        server: my-docker
+        container: prometheus
+        ping: prometheus.<yourinternaldomain>
+        widget:
+          type: prometheus
+          url: https://prometheus.<yourinternaldomain>

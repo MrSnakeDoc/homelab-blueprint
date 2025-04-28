@@ -1,0 +1,26 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr:4.0.4
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - ~/docker/sonarr/config:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.entrypoints=http,https"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.<yourinternaldomain>`)"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.routers.sonarr.service=sonarr"
+      - "traefik.http.routers.sonarr.tls=true"
+      - "traefik.http.routers.sonarr.tls.certresolver=prod"
+    restart: unless-stopped
+    networks:
+      - app-network

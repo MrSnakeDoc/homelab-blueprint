@@ -1,0 +1,46 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  client:
+    image: bluewaveuptime/uptime_client:latest
+    container_name: ckm
+    restart: always
+    environment:
+      UPTIME_APP_API_BASE_URL: "https://ckm.<yourinternaldomain>/api/v1"
+    depends_on:
+      - server
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ckm.entrypoints=http,https'
+      - 'traefik.http.routers.ckm.rule=Host(`ckm.<yourinternaldomain>`)'
+      - 'traefik.http.services.ckm.loadbalancer.server.port=80'
+      - 'traefik.http.routers.ckm.service=ckm'
+      - 'traefik.http.routers.ckm.tls=true'
+      - 'traefik.http.routers.ckm.tls.certresolver=prod'
+    networks:
+      - app-network
+  server:
+    image: bluewaveuptime/uptime_server:latest
+    container_name: ckms
+    restart: always
+    environment:
+      - DB_CONNECTION_STRING=mongodb://mongodb:27017/uptime_db
+      - REDIS_HOST=redis
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+  mongodb:
+    image: bluewaveuptime/uptime_database_mongo:latest
+    container_name: ckmdb
+    restart: always
+    volumes:
+      - ~/docker/mongo/data:/data/db
+    command: ["mongod", "--quiet"]
+    networks:
+      - app-network

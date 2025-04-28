@@ -1,0 +1,24 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  outline:
+    image: docker.getoutline.com/outlinewiki/outline:latest
+    container_name: outline
+    env_file: .env
+    user: "1000:1000"
+    volumes:
+      - ~/docker/outline/storage-data:/var/lib/outline/data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.outline.entrypoints=http,https'
+      - 'traefik.http.routers.outline.rule=Host(`outline.<yourinternaldomain>`)'
+      - 'traefik.http.services.outline.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.outline.service=outline'
+      - 'traefik.http.routers.outline.tls=true'
+      - 'traefik.http.routers.outline.tls.certresolver=prod'
+    networks:
+      - app-network
+    restart: unless-stopped

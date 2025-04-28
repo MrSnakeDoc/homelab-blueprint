@@ -1,0 +1,64 @@
+name: 🐛 Bug Report
+description: Create a report to help improve the project
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Before submitting, please check if a similar issue already exists.
+
+  - type: input
+    id: version
+    attributes:
+      label: Environment
+      description: "What version of Docker and Docker Compose are you running?"
+      placeholder: "Docker 24.0.7, Docker Compose 2.21.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Affected Service
+      description: Which service is affected by this issue?
+      options:
+        - Traefik
+        - Authentik
+        - Cloudflared
+        - Homepage
+        - Gitea
+        - Outline
+        - Mealie
+        - Monitoring Stack
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of what the bug is
+      placeholder: "When I try to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Please copy and paste any relevant log output
+      render: shell

@@ -1,0 +1,22 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  uptimekuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptimekuma
+    restart: unless-stopped
+    volumes:
+      - ~/docker/uptimekuma/config:/app/data:rw
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.uptimekuma.entrypoints=http,https'
+      - 'traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.<yourinternaldomain>`) || Host(`uptimekuma.<yourexternaldomain>`)'
+      - 'traefik.http.services.uptimekuma.loadbalancer.server.port=3001'
+      - 'traefik.http.routers.uptimekuma.service=uptimekuma'
+      - 'traefik.http.routers.uptimekuma.tls=true'
+      - 'traefik.http.routers.uptimekuma.tls.certresolver=prod'
+    networks:
+      - app-network

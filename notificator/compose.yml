@@ -1,0 +1,25 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  notificator:
+    image: gitea.<yourinternaldomain>/mrsnakedoc/notificator:latest
+    container_name: notificator
+    environment:
+      - GOTIFY_URL=${GOTIFY_URL}
+      - GOTIFY_CICD_TOKEN=${GOTIFY_CICD_TOKEN}
+      - GOTIFY_ANSIBLE_TOKEN=${GOTIFY_ANSIBLE_TOKEN}
+      - GIN_MODE=release
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.notificator.entrypoints=http,https'
+      - 'traefik.http.routers.notificator.rule=Host(`notificator.<yourinternaldomain>`)'
+      - 'traefik.http.services.notificator.loadbalancer.server.port=8080'
+      - 'traefik.http.routers.notificator.service=notificator'
+      - 'traefik.http.routers.notificator.tls=true'
+      - 'traefik.http.routers.notificator.tls.certresolver=prod'
+    networks:
+      - app-network
+    restart: unless-stopped

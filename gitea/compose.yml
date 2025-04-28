@@ -1,0 +1,38 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: always
+    ports:
+      - '22:22'
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=${POSTGRES_HOST}
+      - GITEA__database__NAME=${POSTGRES_DB}
+      - GITEA__database__USER=${POSTGRES_USER}
+      - GITEA__database__PASSWD=${POSTGRES_PASSWORD}
+    volumes:
+      - ~/docker/gitea/data:/data
+      - ~/docker/gitea/config:/var/lib/gitea
+      - ~/homelab/gitea/config/app.ini:/data/gitea/conf/app.ini
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.gitea.rule=Host(`gitea.<yourinternaldomain>`)'
+      - 'traefik.http.routers.gitea.entrypoints=http,https'
+      - 'traefik.http.routers.gitea.tls.certresolver=prod'
+      - 'traefik.http.services.gitea.loadbalancer.server.port=3000'
+      - 'traefik.tcp.routers.giteassh.rule=HostSNI(`*`)'
+      - 'traefik.tcp.routers.giteassh.entrypoints=ssh'
+      - 'traefik.tcp.routers.giteassh.service=giteassh-svc'
+      - 'traefik.tcp.services.giteassh-svc.loadbalancer.server.port=22'
+    networks:
+      - app-network

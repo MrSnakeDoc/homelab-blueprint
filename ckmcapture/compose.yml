@@ -1,0 +1,25 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  capture:
+    image: ghcr.io/bluewave-labs/capture:latest
+    container_name: capture
+    restart: unless-stopped
+    environment:
+      - API_SECRET=${API_SECRET}
+      - GIN_MODE=release
+    volumes:
+      - /etc/os-release:/etc/os-release:ro
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.capture.entrypoints=http,https'
+      - 'traefik.http.routers.capture.rule=Host(`capture.<yourinternaldomain>`)'
+      - 'traefik.http.services.capture.loadbalancer.server.port=59232'
+      - 'traefik.http.routers.capture.service=capture'
+      - 'traefik.http.routers.capture.tls=true'
+      - 'traefik.http.routers.capture.tls.certresolver=prod'
+    networks:
+      - app-network

@@ -1,0 +1,36 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - ~/docker/redis:/data
+    networks:
+      - app-network
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.redisinsight.entrypoints=http,https'
+      - 'traefik.http.routers.redisinsight.rule=Host(`redisinsight.<yourinternaldomain>`)'
+      - 'traefik.http.services.redisinsight.loadbalancer.server.port=5540'
+      - 'traefik.http.routers.redisinsight.service=redisinsight'
+      - 'traefik.http.routers.redisinsight.tls=true'
+      - 'traefik.http.routers.redisinsight.tls.certresolver=prod'
+    networks:
+      - app-network

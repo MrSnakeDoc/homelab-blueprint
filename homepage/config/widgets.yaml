@@ -1,0 +1,34 @@
+---
+- resources:
+    cpu: true
+
+- resources:
+    label: RAM
+    memory: true
+
+- resources:
+    label: Storage
+    disk: /
+
+- resources:
+    label: Work time
+    uptime: true
+
+- search:
+    provider: [google, duckduckgo]
+    target: _blank
+
+
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short
+      hourCycle: h23
+
+- openmeteo:
+    label: Berlin
+    latitude: 48.8221
+    longitude: 2.4122
+    timezone: Europe/Berlin
+    units: metric
+    cache: 5

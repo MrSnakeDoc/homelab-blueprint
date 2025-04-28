@@ -1,0 +1,29 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  adguard:
+    image: adguard/adguardhome:latest
+    container_name: adguard
+    restart: unless-stopped
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+    volumes:
+      - ~/docker/adguard/config/work:/opt/adguardhome/work
+      - ./conf:/opt/adguardhome/conf
+      - ~/docker/adguard/config/logs:/opt/adguardhome/logs
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.adguard.entrypoints=http,https'
+      - 'traefik.http.routers.adguard.rule=Host(`adguard.<yourinternaldomain>`)'
+      - 'traefik.http.services.adguard.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.adguard.service=adguard'
+      - 'traefik.http.routers.adguard.tls=true'
+      - 'traefik.http.routers.adguard.tls.certresolver=prod'
+    networks:
+      - app-network
+    environment:
+      - TZ=Europe/Paris

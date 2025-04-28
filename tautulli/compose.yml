@@ -1,0 +1,26 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  tautulli:
+    image: ghcr.io/tautulli/tautulli:latest
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - ~/docker/tautulli/config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.tautulli.entrypoints=http,https'
+      - 'traefik.http.routers.tautulli.rule=Host(`tautulli.<yourinternaldomain>`)'
+      - 'traefik.http.services.tautulli.loadbalancer.server.port=8181'
+      - 'traefik.http.routers.tautulli.service=tautulli'
+      - 'traefik.http.routers.tautulli.tls=true'
+      - 'traefik.http.routers.tautulli.tls.certresolver=prod'
+    networks:
+      - app-network

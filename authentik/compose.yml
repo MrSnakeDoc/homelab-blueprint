@@ -1,0 +1,68 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  authentik_server:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.8.3}
+    container_name: authentik
+    restart: unless-stopped
+    command: server
+    env_file:
+      - .env
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_REDIS__PORT: ${REDIS_PORT:-6379}
+      AUTHENTIK_REDIS__USER: ${REDIS_USER:-default}
+      AUTHENTIK_REDIS__DB: ${REDIS_DB:-0}
+      AUTHENTIK_POSTGRESQL__HOST: ${PG_HOST}
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS:?error}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?error}
+      AUTHENTIK_BOOTSTRAP_PASSWORD: ${AUTHENTIK_BOOTSTRAP_PASSWORD:?error}
+      AUTHENTIK_BOOTSTRAP_EMAIL: ${AUTHENTIK_BOOTSTRAP_EMAIL:?error}
+      AUTHENTIK_LISTEN__HTTPS: ${AUTHENTIK_LISTEN__HTTPS:-0.0.0.0:9000}
+    volumes:
+      - ~/docker/authentik/media:/media
+      - ~/docker/authentik/custom-templates:/templates
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.authentik.entrypoints=http,https'
+      - 'traefik.http.routers.authentik.rule=Host(`authentik.<yourinternaldomain>`)'
+      - 'traefik.http.services.authentik.loadbalancer.server.port=9000'
+      - 'traefik.http.routers.authentik.service=authentik'
+      - 'traefik.http.routers.authentik.tls=true'
+      - 'traefik.http.routers.authentik.tls.certresolver=prod'
+      - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto = https'
+    networks:
+      - app-network
+
+  authentik_worker:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.4.1}
+    container_name: authentik_worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_REDIS__PORT: ${REDIS_PORT:-6379}
+      AUTHENTIK_REDIS__USER: ${REDIS_USER:-default}
+      AUTHENTIK_REDIS__DB: ${REDIS_DB:-0}
+      AUTHENTIK_POSTGRESQL__HOST: ${PG_HOST}
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS:?error}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?error}
+      AUTHENTIK_BOOTSTRAP_PASSWORD: ${AUTHENTIK_BOOTSTRAP_PASSWORD:?error}
+      AUTHENTIK_BOOTSTRAP_EMAIL: ${AUTHENTIK_BOOTSTRAP_EMAIL:?error}
+      AUTHENTIK_LISTEN__HTTPS: ${AUTHENTIK_LISTEN__HTTPS:-0.0.0.0:9000}
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/docker/authentik/media:/media
+      - ~/docker/authentik/custom-templates:/templates
+    networks:
+      - app-network

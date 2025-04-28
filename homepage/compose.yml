@@ -1,0 +1,30 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    volumes:
+      - ~/homelab/homepage/config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      # - PUID=1000
+      # - PGID=1000
+      - LOG_LEVEL=info
+      - HOMEPAGE_ALLOWED_HOSTS=homepage.<yourinternaldomain>
+    env_file:
+      - .env
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.homepage.entrypoints=http,https'
+      - 'traefik.http.routers.homepage.rule=Host(`homepage.<yourinternaldomain>`)'
+      - 'traefik.http.services.homepage.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.homepage.service=homepage'
+      - 'traefik.http.routers.homepage.tls=true'
+      - 'traefik.http.routers.homepage.tls.certresolver=prod'
+    networks:
+      - app-network

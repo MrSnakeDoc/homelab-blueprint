@@ -1,0 +1,25 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Europe/Paris
+    volumes:
+      - ~/homelab/overseerr/config:/app/config
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.overseerr.entrypoints=http,https'
+      - 'traefik.http.routers.overseerr.rule=Host(`overseerr.<yourinternaldomain>`)'
+      - 'traefik.http.services.overseerr.loadbalancer.server.port=5055'
+      - 'traefik.http.routers.overseerr.service=overseerr'
+      - 'traefik.http.routers.overseerr.tls=true'
+      - 'traefik.http.routers.overseerr.tls.certresolver=prod'
+    restart: unless-stopped
+    networks:
+      - app-network

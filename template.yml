@@ -1,0 +1,24 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  <replace>:
+    image: <replaceimage>:latest
+    container_name: <replacename>
+    environment:
+      - add environment variables here
+    volumes:
+      - ~/<replacepath>:<replacepathinside>
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.<replace>.entrypoints=http,https'
+      - 'traefik.http.routers.<replace>.rule=Host(`<replace>.<yourdomain>`)'
+      - 'traefik.http.services.<replace>.loadbalancer.server.port=<replace>'
+      - 'traefik.http.routers.<replace>.service=<replace>'
+      - 'traefik.http.routers.<replace>.tls=true'
+      - 'traefik.http.routers.<replace>.tls.certresolver=prod'
+    restart: unless-stopped
+    networks:
+      - app-network

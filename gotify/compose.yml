@@ -1,0 +1,30 @@
+---
+networks:
+  app-network:
+    external: true
+
+services:
+  gotify:
+    image: gotify/server
+    restart: unless-stopped
+    container_name: gotify
+    environment:
+      GOTIFY_SERVER_SSL_LETSENCRYPT_ENABLED: false
+      GOTIFY_DATABASE_DIALECT: postgres
+      GOTIFY_DATABASE_CONNECTION: "host=${POSTGRES_HOST} port=5432 user=${POSTGRES_USER} dbname=${POSTGRES_DB} password=${POSTGRES_PASS} sslmode=disable"
+      GOTIFY_DEFAULTUSER_NAME: ${DEFAULTUSER_NAME}
+      GOTIFY_DEFAULTUSER_PASS: ${DEFAULTUSER_PASS}
+      GOTIFY_REGISTRATION: false
+      TZ: ${TZ}
+    volumes:
+      - ~/docker/gotify/data:/app/data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.gotify.entrypoints=http,https'
+      - 'traefik.http.routers.gotify.rule=Host(`gotify.<yourinternaldomain>`) || Host(`gotify.<yourexternaldomain>`)'
+      - 'traefik.http.services.gotify.loadbalancer.server.port=80'
+      - 'traefik.http.routers.gotify.service=gotify'
+      - 'traefik.http.routers.gotify.tls=true'
+      - 'traefik.http.routers.gotify.tls.certresolver=prod'
+    networks:
+      - app-network
