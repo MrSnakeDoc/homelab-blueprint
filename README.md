@@ -1,7 +1,5 @@
 # 🏠 Homelab Blueprint
 
-# 🏠 Homelab Blueprint
-
 [![Docker Compose](https://img.shields.io/badge/docker_compose-ready-brightgreen.svg)](https://docs.docker.com/compose/)
 [![Homelab](https://img.shields.io/badge/homelab-ready-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
