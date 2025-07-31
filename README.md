@@ -54,7 +54,7 @@ graph TD
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/homelab-blueprint.git
+git clone https://github.com/MrSnakeDoc/homelab-blueprint.git
 cd homelab-blueprint
 ```
 
