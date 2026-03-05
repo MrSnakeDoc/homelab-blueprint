@@ -1,0 +1,29 @@
+---
+- Productivity:
+    - ChatGPT:
+        - icon: chatgpt.png
+          abbr: ChatGPT
+          href: https://chat.openai.com/
+
+    - Docker Hub:
+        - icon: docker.png
+          abbr: Docker Hub
+          href: https://hub.docker.com
+
+- Repositories:
+    - Github:
+        - icon: si-github-#FFFFFF
+          href: https://github.com/
+
+- Cloud Services:
+    - Google:
+        - icon: google.png
+          href: https://google.com
+    - Cloudflare:
+        - icon: cloudflare.png
+          href: https://dash.cloudflare.com
+
+- Cloud Platforms:
+    - Amazon Web Services (AWS):
+        - icon: aws.png
+          href: https://aws.amazon.com/
