@@ -1,0 +1,27 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  jellyseer:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseer
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Paris
+    volumes:
+      - ~/<replacepath>/settings.json:/app/config/settings.json
+      - ~/<replacepath>/logs:/app/config/logs
+      - ~/<replacepath>/db:/app/config/db
+      - ~/<replacepath>/cache:/app/config/cache
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.jellyseer.entrypoints=http,https'
+      - 'traefik.http.routers.jellyseer.rule=Host(`jellyseer.<yourdomain>.<tld>`)'
+      - 'traefik.http.services.jellyseer.loadbalancer.server.port=5055'
+      - 'traefik.http.routers.jellyseer.service=jellyseer'
+      - 'traefik.http.routers.jellyseer.tls=true'
+      - 'traefik.http.routers.jellyseer.tls.certresolver=prod'
+    networks:
+      - <yournetwork>
