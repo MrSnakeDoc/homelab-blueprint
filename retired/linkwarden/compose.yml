@@ -1,0 +1,25 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:latest
+    container_name: linkwarden
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
+    restart: always
+    volumes:
+      - ~/<replacepath>:/data/data
+    networks:
+      - <yournetwork>
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.linkwarden.entrypoints=http,https'
+      - 'traefik.http.routers.linkwarden.rule=Host(`linkwarden.<yourdomain>.<tld>`)'
+      - 'traefik.http.services.linkwarden.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.linkwarden.service=linkwarden'
+      - 'traefik.http.routers.linkwarden.tls=true'
+      - 'traefik.http.routers.linkwarden.tls.certresolver=prod'

@@ -1,0 +1,39 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:14-rootless
+    container_name: forgejo
+    user: "1000:1000"
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - FORGEJO__database__DB_TYPE=postgres
+      - FORGEJO__database__HOST=${POSTGRES_HOST}
+      - FORGEJO__database__NAME=${POSTGRES_DB}
+      - FORGEJO__database__USER=${POSTGRES_USER}
+      - FORGEJO__database__PASSWD=${POSTGRES_PASSWORD}
+    volumes:
+      - ~/<replacepath>/data:/data
+      - ~/<replacepath>/gitea:/var/lib/gitea
+      - ~/<replacepath>/config/:/var/lib/gitea/custom/conf/
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.forgejo.entrypoints=http,https"
+      - "traefik.http.routers.forgejo.rule=Host(`git.<yourdomain>.<tld>`)"
+      - "traefik.http.services.forgejo.loadbalancer.server.port=3000"
+      - "traefik.http.routers.forgejo.service=forgejo"
+      - "traefik.http.routers.forgejo.tls=true"
+      - "traefik.http.routers.forgejo.tls.certresolver=prod"
+      - "traefik.http.routers.forgejo.middlewares=internal-only@file"
+      - "traefik.tcp.routers.forgejossh.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.forgejossh.entrypoints=ssh"
+      - "traefik.tcp.routers.forgejossh.service=forgejossh-svc"
+      - "traefik.tcp.services.forgejossh-svc.loadbalancer.server.port=22"
+    networks:
+      - <yournetwork>

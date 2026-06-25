@@ -1,0 +1,35 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:10.11.2
+    container_name: jellyfin
+    restart: unless-stopped
+    dns:
+      - <IP_ADDRESS>
+      - <IP_ADDRESS>
+    environment:
+      - JELLYFIN_PublishedServerUrl=https://jellyfin.<yourdomain>.<tld>
+      - TZ=${TZ}
+      - PUID=<youruid>
+      - PGID=<yourgid>
+    volumes:
+      - ~/<replacepath>/jellyfin/config:/config
+      - ~/<replacepath>jellyfin/cache:/cache
+      - ~/<replacepath>/video/series:/series
+      - ~/<replacepath>/video/movies:/movies
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.<replace>.entrypoints=http,https'
+      - 'traefik.http.routers.<replace>.rule=Host(`<replace>.<yourdomain>.<tld>`)'
+      - 'traefik.http.services.<replace>.loadbalancer.server.port=<replace>'
+      - 'traefik.http.routers.<replace>.service=<replace>'
+      - 'traefik.http.routers.<replace>.tls=true'
+      - 'traefik.http.routers.<replace>.tls.certresolver=prod'
+    # ports: # Uncomment if you want to access Jellyfin without Traefik
+    #   - <yourport>:8096
+    networks:
+      - <yournetwork>

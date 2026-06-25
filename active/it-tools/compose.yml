@@ -1,0 +1,21 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  it-tools:
+    image: ghcr.io/corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ittools.entrypoints=http,https'
+      - 'traefik.http.routers.ittools.rule=Host(`ittools.<yourdomain>.<tld>`)'
+      - 'traefik.http.services.ittools.loadbalancer.server.port=80'
+      - 'traefik.http.routers.ittools.service=ittools'
+      - 'traefik.http.routers.ittools.tls=true'
+      - 'traefik.http.routers.ittools.tls.certresolver=prod'
+      - "traefik.docker.network=<yournetwork>"
+    networks:
+      - <yournetwork>

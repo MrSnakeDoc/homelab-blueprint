@@ -1,0 +1,33 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
+    user: "1000:1000"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Tashkent
+      - LOG_LEVEL=debug
+      - PORT=5055
+      - DB_TYPE=${DB_TYPE}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+    volumes:
+      - ~/<replacepath>/config/:/app/config/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.seer.entrypoints=http,https"
+      - "traefik.http.routers.seer.rule=Host(`seerr.<yourdomain>.<tld>`)"
+      - "traefik.http.services.seer.loadbalancer.server.port=5055"
+      - "traefik.http.routers.seer.service=seer"
+      - "traefik.http.routers.seer.tls=true"
+      - "traefik.http.routers.seer.tls.certresolver=prod"
+    networks:
+      - <yournetwork>

@@ -1,0 +1,63 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  woodpecker:
+    image: woodpeckerci/woodpecker-server:v3
+    container_name: woodpecker
+    user: "1000:1000"
+    restart: unless-stopped
+    volumes:
+      - ~/<replacepath>/data:/var/lib/woodpecker/
+    environment:
+      - WOODPECKER_OPEN=false
+      - WOODPECKER_HOST=${WOODPECKER_HOST}
+      - WOODPECKER_FORGEJO=true
+      - WOODPECKER_FORGEJO_URL=${WOODPECKER_FORGEJO_URL}
+      - WOODPECKER_FORGEJO_CLIENT=${WOODPECKER_FORGEJO_CLIENT}
+      - WOODPECKER_FORGEJO_SECRET=${WOODPECKER_FORGEJO_SECRET}
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.woodpecker.entrypoints=http,https"
+      - "traefik.http.routers.woodpecker.rule=Host(`ci.<yourdomain>.<tld>`)"
+      - "traefik.http.services.woodpecker.loadbalancer.server.port=8000"
+      - "traefik.http.routers.woodpecker.service=woodpecker"
+      - "traefik.http.routers.woodpecker.tls=true"
+      - "traefik.http.routers.woodpecker.tls.certresolver=prod"
+    networks:
+      - <yournetwork>
+
+  wdp_runner1:
+    image: woodpeckerci/woodpecker-agent:v3
+    container_name: wdp_runner1
+    command: agent
+    restart: unless-stopped
+    depends_on:
+      - woodpecker
+    volumes:
+      - ./config/runner1:/etc/woodpecker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker:9000
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+    networks:
+      - <yournetwork>
+
+  wdp_runner2:
+    image: woodpeckerci/woodpecker-agent:v3
+    container_name: wdp_runner2
+    command: agent
+    restart: unless-stopped
+    depends_on:
+      - woodpecker
+    volumes:
+      - ./config/runner2:/etc/woodpecker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker:9000
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+    networks:
+      - <yournetwork>

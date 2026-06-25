@@ -1,0 +1,8 @@
+domain.tld:53 {
+    errors
+    log
+
+    file /etc/coredns/db.domain.tld
+
+    cache 300
+}

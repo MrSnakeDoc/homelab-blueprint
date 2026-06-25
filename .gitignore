@@ -1,0 +1,25 @@
+# Env files
+**/.env
+.env*
+!.env.example
+
+# Secrets
+*/secrets/
+**/secrets.*
+*.key
+*.pem
+*.crt
+
+# Logs
+*/logs/
+*.log
+
+# Config files with sensitive data
+**/app.ini
+**/config.yml
+!example.config.yml
+
+# Build & temp files
+*/dist/
+*/build/
+*/tmp/

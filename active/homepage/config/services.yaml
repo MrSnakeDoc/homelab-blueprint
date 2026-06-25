@@ -1,0 +1,212 @@
+---
+- Network:
+    - AdGuard:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/adguard-home.svg'
+        href: https://adguard.<yourdomain>.<tld>
+        target: _blank
+        description: ''
+        server: my-docker
+        container: adguard
+        ping: adguard.<yourdomain>.<tld>
+        widget:
+          type: adguard
+          url: https://adguard.<yourdomain>.<tld>
+          username: {{HOMEPAGE_VAR_ADGUARD_USER}}
+          password: {{HOMEPAGE_VAR_ADGUARD_PASSWORD}}
+    - Traefik:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/traefik.svg'
+        href: http://traefik.<yourdomain>.<tld>
+        target: _blank
+        description: ''
+        server: my-docker
+        container: traefik
+        ping: traefik.<yourdomain>.<tld>
+        widget:
+          type: traefik
+          url: https://traefik.<yourdomain>.<tld>
+          username: {{HOMEPAGE_VAR_TRAEFIK_USER}}
+          password: {{HOMEPAGE_VAR_TRAEFIK_PASSWORD}}
+    - Router:
+        icon: ''
+        href: https://router.<yourdomain>.<tld>
+        target: _blank
+        description: ''
+        ping: router.<yourdomain>.<tld>
+        siteMonitor: https://router.<yourdomain>.<tld>
+
+- Infrastructure and Data:
+    - Proxmox:
+        href: https://prx.<yourdomain>.<tld>
+        icon: ''
+        description: ''
+        siteMonitor: https://prx.<yourdomain>.<tld>
+        ping: prx.<yourdomain>.<tld>
+        widget:
+          type: proxmox
+          url: https://prx.<yourdomain>.<tld>
+          username: {{HOMEPAGE_VAR_PROXMOX_USERNAME}}
+          password: {{HOMEPAGE_VAR_PROXMOX_PASSWORD}}
+          fields: ['vms', 'resources.cpu', 'resources.mem']
+    - Pgadmin4:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/pgadmin.svg'
+        href: https://pgadmin.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: pgadmin
+        ping: pgadmin.<yourdomain>.<tld>
+    - RedisInsight:
+        icon: 'https://cdn.icon-icons.com/icons2/2415/PNG/512/redis_plain_logo_icon_146366.png'
+        href: https://redisinsight.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: redisinsight
+        ping: redisinsight.<yourdomain>.<tld>
+    - Gitea:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/gitea.svg'
+        href: https://gitea.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: gitea
+        ping: gitea.<yourdomain>.<tld>
+        widget:
+          type: gitea
+          url: https://gitea.<yourdomain>.<tld>
+          key: {{HOMEPAGE_VAR_GITEA_TOKEN}}
+    - Drone:
+        icon: 'https://miro.medium.com/v2/resize:fit:256/0*AqO_2lNemh_Fl9Gm.png'
+        href: https://drone.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: drone
+        ping: drone.<yourdomain>.<tld>
+    - Semaphore:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/semaphore.svg'
+        href: https://semaphore.<yourdomain>.<tld>
+        description: ''
+        ping: semaphore.<yourdomain>.<tld>
+
+- Resources:
+    - NAS:
+        icon: ''
+        href: https://nas.<yourdomain>.<tld>
+        target: _blank
+        description: ""
+        ping: nas.<yourdomain>.<tld>
+        siteMonitor: https://nas.<yourdomain>.<tld>
+        widget:
+          type: diskstation
+          url: https://nas.<yourdomain>.<tld>
+          username: {{HOMEPAGE_VAR_NAS_USERNAME}}
+          password: {{HOMEPAGE_VAR_NAS_PASSWORD}}
+          fields:
+            ['uptime', 'volumeAvailable', 'resources.cpu', 'resources.mem']
+    - Gotify:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/gotify.svg'
+        href: https://gotify.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: gotify
+        ping: gotify.<yourdomain>.<tld>
+    - Linkwarden:
+        icon: 'https://docs.linkwarden.app/img/logo.png'
+        href: https://linkwarden.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: linkwarden
+        ping: linkwarden.<yourdomain>.<tld>
+        widget:
+          type: linkwarden
+          url: https://linkwarden.<yourdomain>.<tld>
+          key: {{HOMEPAGE_VAR_LINKWARDEN_KEY}}
+    - overseerr:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/overseerr.svg'
+        href: https://overseerr.<yourdomain>.<tld>
+        description: ""
+        server: my-docker
+        container: overseerr
+        ping: overseerr.<yourdomain>.<tld>
+        widget:
+          type: overseerr
+          url: https://overseerr.<yourdomain>.<tld>
+          key: {{HOMEPAGE_VAR_OVERSEERR_KEY}}
+          fields: ['pending', 'approved', 'available', 'processing']
+    - Jellyfin:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/jellyfin.svg'
+        href: https://jellyfin.<yourdomain>.<tld>
+        description: "Streaming your mediocre media collection in 480p because 4K is too much for your ancient hardware. Enjoy buffering!"
+        ping: jellyfin.<yourdomain>.<tld>
+        widget:
+          type: jellyfin
+          url: https://jellyfin.<yourdomain>.<tld>
+          key: {{HOMEPAGE_VAR_JF_KEY}}
+          enableBlocks: true
+          enableNowPlaying: true
+          enableUser: true
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: false
+    - Jellyseer:
+        icon: 'https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/svg/jellyseerr.svg'
+        href: https://jellyseer.<yourdomain>.<tld>
+        description: "Filling your life with terabytes of content so dreadful that even your friends refuse to watch it with you. Wait no ! You have no friends."
+        ping: jellyseer.<yourdomain>.<tld>
+        widget:
+          type: jellyseerr
+          url: https://jellyseer.<yourdomain>.<tld>
+          key: {{HOMEPAGE_VAR_JS_KEY}}
+          fields: ["pending", "approved", "available"]
+    - Outline:
+        icon: 'https://www.getoutline.com/images/logo.svg'
+        href: https://outline.<yourdomain>.<tld>
+        description: ''
+        server: my-docker
+        container: outline
+        ping: outline.<yourdomain>.<tld>
+    - Mealie:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/mealie.svg'
+        href: https://mealie.<yourdomain>.<tld>
+        description: ""
+        server: my-docker
+        container: mealie
+        ping: mealie.<yourdomain>.<tld>
+        widget:
+          type: mealie
+          url: https://mealie.<yourdomain>.<tld>
+          key: {{HOMEPAGE_VAR_MEALIE_KEY}}
+          fields: ['recipes', 'users', 'categories', 'tags']
+          version: 2
+
+- Monitoring:
+    - Uptime-Kuma:
+        icon: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/1385e150f515795aa078bdbae2b8cdafb7567368/svg/uptime-kuma.svg'
+        href: https://uptimekuma.<yourdomain>.<tld>
+        description: ""
+        server: my-docker
+        container: uptimekuma
+        ping: uptimekuma.<yourdomain>.<tld>
+        widget:
+          type: uptimekuma
+          url: https://uptimekuma.<yourdomain>.<tld>
+          slug: homepage
+    - Grafana:
+        href: https://grafana.<yourdomain>.<tld>
+        description: ''
+        icon: grafana.png
+        server: my-docker
+        container: grafana
+        ping: grafana.<yourdomain>.<tld>
+        widget:
+          type: grafana
+          url: https://grafana.<yourdomain>.<tld>
+          username: {{HOMEPAGE_VAR_GRAFANA_USERNAME}}
+          password: {{HOMEPAGE_VAR_GRAFANA_PASSWORD}}
+          fields: ['dashboards', 'datasources', 'totalalerts', 'alertstriggered']
+    - Prometheus:
+        href: https://prometheus.<yourdomain>.<tld>
+        description: ''
+        icon: prometheus.png
+        server: my-docker
+        container: prometheus
+        ping: prometheus.<yourdomain>.<tld>
+        widget:
+          type: prometheus
+          url: https://prometheus.<yourdomain>.<tld>

@@ -1,0 +1,20 @@
+---
+networks:
+  <yournetwork>:
+    external: true
+
+services:
+  cdns:
+    image: coredns/coredns:1.14.3
+    container_name: coredns
+    user: "1000:1000"
+    restart: unless-stopped
+    ports:
+      - "5353:53/tcp"
+      - "5353:53/udp"
+    volumes:
+      - ./core/Corefile:/Corefile:ro
+      - ./core/db.domain.tld:/etc/coredns/db.domain.tld:ro
+    command: -conf /Corefile
+    networks:
+      - <yournetwork>
